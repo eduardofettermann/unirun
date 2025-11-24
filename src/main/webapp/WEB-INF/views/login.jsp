@@ -62,16 +62,5 @@
                     </tr>
                 </c:forEach>
             </table>
-
-            <hr />
-            <h2>Setup</h2>
-            <p style="color: #666; font-size: 14px;">
-                Este botão adiciona dados de demonstração ao banco de dados (assessoria, usuários e treinos de exemplo).
-                Os dados existentes não serão apagados.
-            </p>
-            <form action="/setup/seed" method="post">
-                <button type="submit" style="background-color: #4CAF50;">Popular Banco de Dados (Seed)</button>
-            </form>
-        </body>
-
+            </body>
         </html>
