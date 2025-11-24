@@ -24,7 +24,7 @@ public class TreinoService {
     }
 
     public List<Treino> findWorkoutsForWeek(Corredor corredor, LocalDate date) {
-        return findByConcluidoForWeek(corredor, date, true);
+        return findAllForWeek(corredor, date);
     }
 
     public List<Treino> findPlannedWorkoutsForWeek(Corredor corredor, LocalDate date) {
@@ -42,5 +42,18 @@ public class TreinoService {
             return List.of();
         }
         return treinoRepository.findByCorredorIdAndConcluidoAndDataBetween(corredor.getId(), concluido, startDate, endDate);
+    }
+
+    private List<Treino> findAllForWeek(Corredor corredor, LocalDate date) {
+        LocalDate start = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate end = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        Date startDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        if (corredor == null || corredor.getId() == null) {
+            return List.of();
+        }
+        return treinoRepository.findByCorredorIdAndDataBetween(corredor.getId(), startDate, endDate);
     }
 }

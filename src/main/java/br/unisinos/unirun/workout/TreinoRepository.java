@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface TreinoRepository extends JpaRepository<Treino, Long> {
     List<Treino> findByCorredorIdAndConcluidoAndDataBetween(Long corredorId, boolean concluido, Date start, Date end);
+
+    List<Treino> findByCorredorIdAndDataBetween(Long id, Date startDate, Date endDate);
 }

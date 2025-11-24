@@ -15,10 +15,10 @@
                     <th>Dia</th>
                     <th>Treino</th>
                 </tr>
-                <c:forEach var="entry" items="${weekWorkouts}">
-                    <tr style="${entry.value.concluido ? 'background-color: #90EE90;' : ''}">
-                        <td>${entry.key}</td>
-                        <td>${entry.value.descricao}</td>
+                <c:forEach var="workout" items="${weekWorkouts}">
+                    <tr style="${workout.completed() ? 'background-color: #90EE90;' : ''}">
+                        <td>${workout.day()}</td>
+                        <td>${workout.description()}</td>
                     </tr>
                 </c:forEach>
             </table>

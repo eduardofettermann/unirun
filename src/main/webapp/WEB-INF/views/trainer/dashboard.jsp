@@ -14,7 +14,7 @@
                 <c:forEach var="student" items="${students}">
                     <li>${student.nome()} - Assessoria: ${student.assessoriaCorridaNome()} - Nutri:
                         ${student.nutricionistaNome()}
-                        <a href="/trainer/student/${student.id()}/workouts">acessar treinos do aluno</a>
+                        <a href="/trainer/${trainerId}/student/${student.id()}/workouts">acessar treinos do aluno</a>
                     </li>
                 </c:forEach>
             </ul>

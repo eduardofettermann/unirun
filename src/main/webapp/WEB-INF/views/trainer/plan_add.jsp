@@ -14,7 +14,7 @@
 
         <body>
             <h1>Adicionar Plano de Treino para o Aluno</h1>
-            <form action="/trainer/student/${runnerId}/plan/add" method="post">
+            <form action="/trainer/student/${runnerId}/workout-plan/add" method="post">
                 <input type="hidden" name="runnerId" value="${runnerId}" />
                 <label>Data: <input type="date" name="date" id="dateInput" /></label><br />
                 <label>Descrição: <input type="text" name="descricao" /></label><br />
