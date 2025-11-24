@@ -72,7 +72,7 @@ INSERT INTO corredor (nome, assessoria_corrida_id) VALUES ('João Corredor', 1);
 
 -- Treinos
 INSERT INTO treino (corredor_id, treinador_id, descricao, data, concluido) VALUES (1, 1, 'Corrida Leve 5km', CURRENT_DATE, TRUE);
-INSERT INTO treino (corredor_id, treinador_id, descricao, data, concluido) VALUES (1, 1, 'Tiro 10x400m', DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), FALSE);
+INSERT INTO treino (corredor_id, treinador_id, descricao, data, concluido) VALUES (1, 1, 'Tiro 10x400m', DATEADD('DAY', 2, CURRENT_DATE), FALSE);
 
 -- Dietas
 INSERT INTO dieta (corredor_id, nutricionista_id, descricao, data, calorias, proteinas, carboidratos, gorduras) VALUES (1, 1, 'Almoço Padrão', CURRENT_DATE, 600, 40.0, 60.0, 20.0);
