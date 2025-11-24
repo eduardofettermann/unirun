@@ -2,6 +2,7 @@ package br.unisinos.unirun.runner;
 
 import br.unisinos.unirun.meal.DietaService;
 import br.unisinos.unirun.meal.model.Dieta;
+import br.unisinos.unirun.runner.dto.RunnerWeeklyWorkoutDTO;
 import br.unisinos.unirun.runner.model.Corredor;
 import br.unisinos.unirun.runner.model.CorredorDTO;
 import br.unisinos.unirun.trainer.TreinadorService;
@@ -60,7 +61,6 @@ public class CorredorController {
                 nutricionista = nutricionistas.get(0);
         }
 
-        // Manual DTO mapping
         CorredorDTO corredorDTO = new CorredorDTO(corredor.getId(), corredor.getNome(),
                 corredor.getAssessoriaCorrida() != null ? corredor.getAssessoriaCorrida().getNome() : null,
                 nutricionista != null ? nutricionista.getNome() : null);
@@ -86,8 +86,11 @@ public class CorredorController {
     public String planned(@RequestParam Long runnerId, Model model) {
         Corredor corredor = corredorService.findById(runnerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Corredor not found"));
-        List<Treino> treinos = treinoService.findPlannedWorkoutsForWeek(corredor, LocalDate.now());
-        model.addAttribute("workouts", treinos);
+        List<Treino> treinos = treinoService.findWorkoutsForWeek(corredor, LocalDate.now());
+
+        RunnerWeeklyWorkoutDTO weekWorkouts = corredorService.getWeekWorkouts(treinos);
+
+        model.addAttribute("weekWorkouts", weekWorkouts.workouts());
         model.addAttribute("runner", new CorredorDTO(corredor.getId(), corredor.getNome(), null, null));
         return "runner/workout/planned";
     }
@@ -168,5 +171,11 @@ public class CorredorController {
         dieta.setGorduras(gorduras);
         dietaService.save(dieta);
         return "redirect:/runner/meals/done?runnerId=" + corredor.getId();
+    }
+
+    @PostMapping("/workouts/{workoutId}/complete")
+    public String completeWorkout(@PathVariable Long workoutId, @RequestParam Long runnerId) {
+        treinoService.markAsCompleted(workoutId);
+        return "redirect:/runner/workouts/planned?runnerId=" + runnerId;
     }
 }
