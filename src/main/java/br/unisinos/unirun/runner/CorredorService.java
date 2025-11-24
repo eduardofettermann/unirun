@@ -2,8 +2,11 @@ package br.unisinos.unirun.runner;
 
 import br.unisinos.unirun.runner.dto.RunnerDailyWorkoutDTO;
 import br.unisinos.unirun.runner.dto.RunnerWeeklyWorkoutDTO;
+import br.unisinos.unirun.runner.dto.RunnerDailyMealDTO;
+import br.unisinos.unirun.runner.dto.RunnerWeeklyMealDTO;
 import br.unisinos.unirun.runner.model.Corredor;
 import br.unisinos.unirun.workout.model.Treino;
+import br.unisinos.unirun.meal.model.Dieta;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -57,5 +60,28 @@ public class CorredorService {
     private String getDayDisplayName(LocalDate date) {
         return date.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pt", "BR"))
                 + " (" + date.getDayOfMonth() + "/" + date.getMonthValue() + ")";
+    }
+
+    public RunnerWeeklyMealDTO getWeekMeals(List<Dieta> dietas) {
+        LocalDate startOfWeek = getStartOfWeek();
+        List<RunnerDailyMealDTO> dailyMeals = IntStream.range(0, 7)
+                .mapToObj(i -> processMealDay(startOfWeek.plusDays(i), dietas))
+                .collect(Collectors.toList());
+        return new RunnerWeeklyMealDTO(dailyMeals);
+    }
+
+    private RunnerDailyMealDTO processMealDay(LocalDate currentDay, List<Dieta> dietas) {
+        Optional<Dieta> mealForDay = findMealForDay(currentDay, dietas);
+        String dayName = getDayDisplayName(currentDay);
+        Long id = mealForDay.map(Dieta::getId).orElse(null);
+        String description = mealForDay.map(Dieta::getDescricao).orElse("Descanso");
+        boolean completed = mealForDay.map(Dieta::isConcluido).orElse(false);
+        return new RunnerDailyMealDTO(id, dayName, description, completed);
+    }
+
+    private Optional<Dieta> findMealForDay(LocalDate currentDay, List<Dieta> dietas) {
+        return dietas.stream()
+                .filter(dieta -> dieta.getData() != null && new Date(dieta.getData().getTime()).toLocalDate().equals(currentDay))
+                .findFirst();
     }
 }

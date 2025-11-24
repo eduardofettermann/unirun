@@ -15,10 +15,7 @@ public class Dieta {
     @Temporal(TemporalType.DATE)
     private java.util.Date data;
 
-    private int calorias;
-    private float proteinas;
-    private float carboidratos;
-    private float gorduras;
+    private boolean concluido;
 
     @ManyToOne
     @JoinColumn(name = "corredor_id")
@@ -44,24 +41,20 @@ public class Dieta {
         this.descricao = descricao;
     }
 
+    public java.util.Date getData() {
+        return data;
+    }
+
     public void setData(java.util.Date data) {
         this.data = data;
     }
 
-    public void setCalorias(int calorias) {
-        this.calorias = calorias;
+    public boolean isConcluido() {
+        return concluido;
     }
 
-    public void setProteinas(float proteinas) {
-        this.proteinas = proteinas;
-    }
-
-    public void setCarboidratos(float carboidratos) {
-        this.carboidratos = carboidratos;
-    }
-
-    public void setGorduras(float gorduras) {
-        this.gorduras = gorduras;
+    public void setConcluido(boolean concluido) {
+        this.concluido = concluido;
     }
 
     public void setCorredor(Corredor corredor) {

@@ -50,4 +50,25 @@ public class DietaService {
             return dietaRepository.findByCorredorIdAndNutricionistaIsNullAndDataBetween(corredor.getId(), startDate, endDate);
         }
     }
+
+    public void markAsCompleted(Long dietaId) {
+        Dieta dieta = dietaRepository.findById(dietaId)
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
+                        org.springframework.http.HttpStatus.NOT_FOUND, "Dieta not found"));
+        dieta.setConcluido(true);
+        dietaRepository.save(dieta);
+    }
+
+    public List<Dieta> findAllForWeek(Corredor corredor, LocalDate now) {
+        LocalDate start = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate end = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        Date startDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        if (corredor == null || corredor.getId() == null) {
+            return List.of();
+        }
+        return dietaRepository.findByCorredorIdAndDataBetween(corredor.getId(), startDate, endDate);
+    }
 }

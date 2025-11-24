@@ -49,10 +49,7 @@ CREATE TABLE dieta (
     nutricionista_id BIGINT,
     descricao VARCHAR(255),
     data DATE,
-    calorias INTEGER,
-    proteinas FLOAT,
-    carboidratos FLOAT,
-    gorduras FLOAT,
+    concluido BOOLEAN,
     CONSTRAINT fk_dieta_corredor FOREIGN KEY (corredor_id) REFERENCES corredor(id),
     CONSTRAINT fk_dieta_nutricionista FOREIGN KEY (nutricionista_id) REFERENCES nutricionista(id)
 );
@@ -75,4 +72,4 @@ INSERT INTO treino (corredor_id, treinador_id, descricao, data, concluido) VALUE
 INSERT INTO treino (corredor_id, treinador_id, descricao, data, concluido) VALUES (1, 1, 'Tiro 10x400m', DATEADD('DAY', 2, CURRENT_DATE), FALSE);
 
 -- Dietas
-INSERT INTO dieta (corredor_id, nutricionista_id, descricao, data, calorias, proteinas, carboidratos, gorduras) VALUES (1, 1, 'Almoço Padrão', CURRENT_DATE, 600, 40.0, 60.0, 20.0);
+INSERT INTO dieta (corredor_id, nutricionista_id, descricao, data, concluido) VALUES (1, 1, 'Almoço Padrão', CURRENT_DATE, false);

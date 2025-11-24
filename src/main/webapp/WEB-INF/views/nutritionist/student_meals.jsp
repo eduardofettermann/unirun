@@ -5,24 +5,23 @@
         <head>
             <title>Andamento da Dieta</title>
         </head>
-
         <body>
             <h1>Andamento da Dieta de ${runnerName}</h1>
             <h2>Refeições desta semana</h2>
-            <ul>
-                <c:forEach var="m" items="${meals}">
-                    <li>${m.data} - ${m.descricao} - ${m.calorias} kcal</li>
+            <table border="1">
+                <tr>
+                    <th>Dia</th>
+                    <th>Refeição</th>
+                </tr>
+                <c:forEach var="meal" items="${weekMeals}">
+                    <tr style="${meal.completed() ? 'background-color: #90EE90;' : ''}">
+                        <td>${meal.day()}</td>
+                        <td>${meal.description()}</td>
+                    </tr>
                 </c:forEach>
-            </ul>
-            <h2>Refeições predefinidas (Propostas)</h2>
-            <ul>
-                <c:forEach var="m" items="${predefined}">
-                    <li>${m.data} - ${m.descricao} - ${m.calorias} kcal (P:${m.proteinas}g C:${m.carboidratos}g
-                        G:${m.gorduras}g)</li>
-                </c:forEach>
-            </ul>
+            </table>
+            <br/>
             <a href="/nutritionist/plan/add?runnerId=${runnerId}">Adicionar Dieta Planejada</a>
-            <br />
             <a href="/nutritionist/dashboard?nutritionistId=${sessionScope.loggedUserId}">Voltar</a>
         </body>
 

@@ -54,6 +54,7 @@ public class DashboardController {
     public String doLogin(@RequestParam Long userId, @RequestParam String userType, HttpSession session) {
         logger.info("User login attempt - Type: {}, ID: {}", userType, userId);
         session.setAttribute("loggedUserId", userId);
+        session.setAttribute("userType", userType);
 
         String redirectUrl = switch (userType) {
             case "RUNNER" -> "redirect:/runner/dashboard?runnerId=" + userId;

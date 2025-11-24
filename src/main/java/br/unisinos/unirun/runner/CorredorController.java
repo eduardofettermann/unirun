@@ -2,6 +2,7 @@ package br.unisinos.unirun.runner;
 
 import br.unisinos.unirun.meal.DietaService;
 import br.unisinos.unirun.meal.model.Dieta;
+import br.unisinos.unirun.runner.dto.RunnerWeeklyMealDTO;
 import br.unisinos.unirun.runner.dto.RunnerWeeklyWorkoutDTO;
 import br.unisinos.unirun.runner.model.Corredor;
 import br.unisinos.unirun.runner.model.CorredorDTO;
@@ -131,8 +132,9 @@ public class CorredorController {
     public String mealsPlanned(@RequestParam Long runnerId, Model model) {
         Corredor corredor = corredorService.findById(runnerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Corredor not found"));
-        List<Dieta> planned = dietaService.findPredefinedMealsForWeek(corredor, LocalDate.now());
-        model.addAttribute("meals", planned);
+        List<Dieta> planned = dietaService.findAllForWeek(corredor, LocalDate.now());
+        RunnerWeeklyMealDTO weekMeals = corredorService.getWeekMeals(planned);
+        model.addAttribute("weekMeals", weekMeals.meals());
         model.addAttribute("runner", new CorredorDTO(corredor.getId(), corredor.getNome(), null, null));
         return "runner/meals/planned";
     }
@@ -155,20 +157,20 @@ public class CorredorController {
 
     @PostMapping("/meals/add")
     public String createMeal(@RequestParam Long runnerId,
-            @RequestParam String descricao,
-            @RequestParam int calorias,
-            @RequestParam float proteinas,
-            @RequestParam float carboidratos,
-            @RequestParam float gorduras) {
+                             @RequestParam String date,
+                             @RequestParam String descricao) {
         Corredor corredor = corredorService.findById(runnerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Corredor not found"));
         Dieta dieta = new Dieta();
         dieta.setCorredor(corredor);
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            dieta.setData(sdf.parse(date));
+        } catch (Exception e) {
+            // handle
+        }
         dieta.setDescricao(descricao);
-        dieta.setCalorias(calorias);
-        dieta.setProteinas(proteinas);
-        dieta.setCarboidratos(carboidratos);
-        dieta.setGorduras(gorduras);
+        dieta.setConcluido(true);
         dietaService.save(dieta);
         return "redirect:/runner/meals/done?runnerId=" + corredor.getId();
     }
@@ -177,5 +179,11 @@ public class CorredorController {
     public String completeWorkout(@PathVariable Long workoutId, @RequestParam Long runnerId) {
         treinoService.markAsCompleted(workoutId);
         return "redirect:/runner/workouts/planned?runnerId=" + runnerId;
+    }
+
+    @PostMapping("/meals/{mealId}/complete")
+    public String completeMeal(@PathVariable Long mealId, @RequestParam Long runnerId) {
+        dietaService.markAsCompleted(mealId);
+        return "redirect:/runner/meals/planned?runnerId=" + runnerId;
     }
 }
