@@ -3,7 +3,7 @@
         <html>
 
         <head>
-            <title>Novo treino</title>
+            <title>Adicionar Plano de Treino</title>
             <script>
                 window.onload = function () {
                     const today = new Date().toISOString().split('T')[0];
@@ -13,14 +13,14 @@
         </head>
 
         <body>
-            <h1>Novo treino</h1>
-            <form action="/runner/workouts/add" method="post">
-                <label>Runner ID: <input type="text" name="runnerId" value="${runnerId}" /></label><br />
+            <h1>Adicionar Plano de Treino para o Aluno</h1>
+            <form action="/trainer/student/${runnerId}/plan/add" method="post">
+                <input type="hidden" name="runnerId" value="${runnerId}" />
                 <label>Data: <input type="date" name="date" id="dateInput" /></label><br />
                 <label>Descrição: <input type="text" name="descricao" /></label><br />
                 <button type="submit">Salvar</button>
             </form>
-            <a href="/runner/dashboard?runnerId=${runnerId}">Voltar</a>
+            <a href="/trainer/dashboard?trainerId=${sessionScope.loggedUserId}">Voltar</a>
         </body>
 
         </html>

@@ -3,14 +3,15 @@
         <html>
 
         <head>
-            <title>Treinos planejados</title>
+            <title>Refeições planejadas</title>
         </head>
 
         <body>
-            <h1>Treinos Planejados - Semana Atual</h1>
+            <h1>Refeições Planejadas - Semana Atual</h1>
             <ul>
-                <c:forEach var="w" items="${workouts}">
-                    <li>${w.data} - ${w.descricao}</li>
+                <c:forEach var="m" items="${meals}">
+                    <li>${m.data} - ${m.descricao} - ${m.calorias} kcal (P:${m.proteinas}g C:${m.carboidratos}g
+                        G:${m.gorduras}g)</li>
                 </c:forEach>
             </ul>
             <a href="/runner/dashboard?runnerId=${runner.id()}">Voltar</a>
